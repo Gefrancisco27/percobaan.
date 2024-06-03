@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pantai Botubarani</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            background-color: #f4f4f4;
+        }
+        .container {
+            padding: 20px;
+            max-width: 1200px; /* Adjusted for larger screens */
+            margin: auto;
+            background-color: #fff;
+            border-radius: 12px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .header {
+            position: relative;
+            color: white;
+        }
+        .header img {
+            width: 100%;
+            height: 350px;
+            object-fit: cover;
+            border-radius: 12px;
+        }
+        .header .overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            border-radius: 12px;
+        }
+        .header .text-container {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            width: 80%;
+        }
+        .header .text-container h1 {
+            font-size: 24px;
+            margin-bottom: 10px;
+            color: white;
+        }
+        .header .text-container p {
+            font-size: 16px;
+            margin-bottom: 5px;
+            color: white;
+        }
+        .logo-menu {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            display: flex;
+            align-items: center;
+        }
+        .logo-menu img {
+            width: 100px;
+            height: auto;
+            margin-right: 50px; /* Adjusted for larger spacing */
+        }
+        .logo-menu nav ul {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+            display: flex;
+        }
+        .logo-menu nav ul li {
+            display: inline;
+            margin-right: 20px;
+        }
+        .logo-menu nav ul li a {
+            color: white;
+            text-decoration: none;
+            font-size: 16px;
+            font-weight: bold;
+        }
+        .logo-menu nav ul li a:hover {
+            text-decoration: underline;
+        }
+        .info-container {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+            flex-wrap: wrap; /* Ensure wrapping on smaller screens */
+        }
+        .info {
+            width: 48%;
+            border: 1px solid #ccc;
+            padding: 10px;
+            border-radius: 12px;
+            box-shadow: 2px 2px 12px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px; /* Added margin for better spacing */
+        }
+        .info h2 {
+            text-align: center;
+        }
+        .info ul {
+            list-style: none;
+            padding: 0;
+        }
+        .info ul li {
+            margin-bottom: 10px;
+        }
+        .separator {
+            border-bottom: 1px solid #a7a6a6;
+            margin: 10px 0;
+        }
+        .address {
+            width: 48%;
+            text-align: center;
+            margin-bottom: 20px; /* Added margin for better spacing */
+        }
+        .address img {
+            width: 100%;
+            border-radius: 12px;
+            margin-bottom: 10px;
+        }
+        .address p {
+            font-size: 14px;
+            margin: 5px 0;
+        }
+        .address span {
+            font-size: 14px;
+            font-weight: bold;
+        }
+        .address p span {
+            font-weight: normal;
+        }
+        .address a {
+            font-size: 14px;
+            text-decoration: none;
+            color: #00BFFF;
+        }
+        .description {
+            border: 1px solid #a7a6a6;
+            padding: 10px;
+            border-radius: 12px;
+            box-shadow: 2px 2px 12px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .description h2 {
+            text-align: center;
+        }
+        .description p {
+            text-align: center;
+        }
+        .image-gallery {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+            flex-wrap: wrap; /* Ensure wrapping on smaller screens */
+        }
+        .image-gallery img {
+            width: 48%;
+            border-radius: 12px;
+            margin-bottom: 20px; /* Added margin for better spacing */
+        }
+        .centered-image {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 20px; /* Added margin for better spacing */
+        }
+        .map {
+            width: 75%;
+            height: 300px;
+            border-radius: 12px;
+        }
+        .judul h1 {
+            text-align: center;
+            color: #00BFFF;
+        }
+        @media (max-width: 768px) {
+            .info, .address {
+                width: 100%;
+            }
+            .image-gallery img {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body onload="initMap()">
+
+<div class="container">
+    <div class="header">
+        <img src="persebaran 1.jpg" alt="Background">
+        <div class="overlay"></div>
+        <div class="text-container">
+            <h1>"Jelajahi Surga Pesisir Gorontalo"</h1>
+            <p>"Jelajahi keajaiban alam yang memikat di tepian pantai Gorontalo"</p>
+            <p>Temukan Keajaiban Laut Gorontalo Destinasi Perjalananmu Menuju Ketenangan dan Kebahagiaan."</p>
+        </div>
+        <div class="logo-menu">
+            <img src="persebaran_logo.png" alt="Logo">
+            <nav>
+                <ul>
+                    <li><a href="#">Home</a></li>
+                    <li><a href="#">Data Tempat Wisata</a></li>
+                    <li><a href="#">About Us</a></li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+    <div class="judul">
+        <h1>Pantai Botubarani</h1>
+    </div>
+    <div class="info-container">
+        <div class="info">
+            <h2>Informasi Tempat Wisata</h2>
+            <ul>
+                <li>Fasilitas+Harga:</li>
+                <ul>
+                    <li>1. Perahu : 100.000/Unit</li>
+                    <li>2. Alat Diving</li>
+                    <li>3. Pelampung</li>
+                    <li>4. Alat snorkeling</li>
+                    <li>5. Jasa Foto</li>
+                </ul>
+                <div class="separator"></div>
+                <li>Harga Tiket:</li>
+                <ul>
+                    <li>1. Tiket  : Rp 5.000/Orang</li>
+                </ul>
+                <div class="separator"></div>
+                <li>Jam Operasional: 24 jam</li>
+                <div class="separator"></div>
+                <li>Konten Terkait:</li>
+                <ul>
+                    <li><a href="https://vt.tiktok.com/ZSFufEYDt/">https://vt.tiktok.com/ZSFufEYDt/</a></li>
+                </ul>
+            </ul>
+        </div>
+        <div class="address">
+            <img src="botubarani.1.jpg" alt="Pantai Botubarani">
+            <p><span>Alamat:</span></p>
+            <p>F3JP+QG8 Pantai Botubarani, Botubarani, Kec. Kabila Bone, Kabupaten Bone Bolango, Gorontalo 96111</p>
+            <p><a href="https://maps.app.goo.gl/FuWRm5v8pX1QKgDEA">https://maps.app.goo.gl/FuWRm5v8pX1QKgDEA</a></p>
+            <p>Koordinat : 0.4826018,123.0859675</p>
+        </div>
+    </div>
+    <div class="description">
+        <h2>Deskripsi</h2>
+        <p>Pantai Botubarani adalah sebuah pesisir yang menghadap langsung ke Teluk Tomini, sehingga memiliki air laut yang berwarna biru bersih dan ombak yang sangat tenang. Pantai Botubarani memiliki pepohonan yang berdiri sejajar secara rapi, seakan siap menjadi pelindung bagi para pengunjung di saat terik melanda. Di bibir pantai juga terdapat dermaga, yang bisa dimanfaatkan para pengunjung untuk duduk bersantai sembari menyantap bekal yang di bawa dari rumah. Menikmati keindahan Pantai Botubarani dari dermaga tersebut juga bisa menjadi pilihan yang menawan, di mana Teluk Tomini akan terlihat lebih sempurna. Selain menyajikan keindahan pesisir, Pantai Botubarani juga sering kali dikunjungi oleh kawanan hiu paus yang jinak. Oleh sebab itu, nelayan setempat menjadikan kehadiran hiu paus atau yang bernama latin Rhyncodon typus tersebut sebagai daya tarik utama. Namun, nelayan tidak bisa memprediksi kapan kehadiran hiu paus di Pantai Botubarani.</p>
+    </div>
+    <div class="image-gallery">
+        <img src="Botubarani.2.jpg" alt="Image 1">
+        <img src="botubarani.3.jpg" alt="Image 2">
+    </div>
+    <div class="centered-image">
+        <div id="map" class="map"></div>
+    </div>
+</div>
+
+<script>
+    var locations = [
+        ["Pantai Botubarani", 0.482392, 123.086187],
+    ];
+
+    var map = L.map('map').setView([0.5427653579481185, 123.05466008541104], 8);
+    mapLink = '<a href="http://openstreetmap.org">OpenStreetMap</a>';
+    L.tileLayer(
+        'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; ' + mapLink + ' Contributors',
+            maxZoom: 18,
+        }).addTo(map);
+
+    for (var i = 0; i < locations.length; i++) {
+        marker = new L.marker([locations[i][1], locations[i][2]])
+            .bindPopup(locations[i][0])
+            .addTo(map);
+    }
+</script>
+
+</body>
+</html>
+
+
+
+
+
+
